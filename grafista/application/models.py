@@ -1,24 +1,29 @@
 import datetime
-from peewee import CharField, DateTimeField, ForeignKeyField
+from peewee import Model, CharField, DateTimeField, ForeignKeyField
 from . import db
 
 
-class Series(db.Model):
+class BaseModel(Model):
+    class Meta:
+        database = db
+
+
+class Series(BaseModel):
     """Table storing the definition of the samples, for example the user count
     or the daily income. A serie is composed of samples, which refer to it.
     """
-    name = CharField(null=False, unique=True)  # users_total_count
-    description = CharField()
-    sample_unit = CharField()  # People, EUR
+    name = CharField(unique=True)  # users_total_count
+    description = CharField(null=True)
+    sample_unit = CharField(null=True)  # People, EUR
 
     def __unicode__(self):
         return self.name
 
 
-class Samples(db.Model):
+class Samples(BaseModel):
     serie = ForeignKeyField(Series, related_name='samples', null=False)
     timestamp = DateTimeField(default=datetime.datetime.now)
-    value = CharField(null=False)
+    value = CharField()
     value_type = CharField(choices=[
         ('int', 'Integer'),
         ('str', 'String'),
