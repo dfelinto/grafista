@@ -1,5 +1,5 @@
 import logging
-from flask import jsonify
+from flask import jsonify, render_template
 from .models import Samples, Series
 from . import app, db
 
@@ -11,7 +11,7 @@ def create_tables(safe=True):
     db.create_tables([Series, Samples], safe=safe)
 
 
-@app.route('/series')
+@app.route('/series/')
 def index():
     series = []
     for s in Series.select():
@@ -24,8 +24,13 @@ def serie_view(name):
     serie = Series.get(name=name)
     samples = []
     for s in Samples.select().where(Samples.serie == serie.id):
-        samples.append((s.value, s.timestamp))
+        samples.append((s.timestamp, s.value))
     return jsonify(samples=samples)
+
+
+@app.route('/')
+def it():
+    return render_template('layout.pug')
 
 
 def insert_sample(serie_name, value):

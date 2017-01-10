@@ -15,6 +15,7 @@ try:
 except ImportError:
     config_local = None
 
+app.jinja_env.add_extension('pypugjs.ext.jinja.PyPugJSExtension')
 db = SqliteDatabase(app.config['DATABASE'], threadlocals=True)
 
 

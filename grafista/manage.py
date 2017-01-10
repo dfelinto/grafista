@@ -11,16 +11,15 @@ manager = Manager(app)
 @manager.command
 def collect():
     from application.main import insert_sample
-    log.info("Collecting data")
     ds = current_app.config['DATA_SOURCES']
-
+    print('Collecting data from {}'.format(ds))
     # Insert sample for the serie
-    for d in ds:
-        r = requests.get(d)
-        print(r.json())
+    for source in ds:
+        r = requests.get(source)
         response_dict = r.json()
-        for k, v in response_dict.items():
-            insert_sample(k, v)
+        for d, v in response_dict.items():
+            print('Storing {} {}'.format(d, v))
+            insert_sample(d, v)
 
 
 @manager.command
