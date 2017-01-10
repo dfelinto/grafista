@@ -24,9 +24,9 @@ def collect():
 
 @manager.command
 def db_init():
-    from application.main import create_tables
+    from application.main import init_db
     # TODO: Expose safety option
-    create_tables()
+    init_db()
 
 if __name__ == "__main__":
     manager.run()

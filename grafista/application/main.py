@@ -6,7 +6,7 @@ from . import app, db
 log = logging.getLogger(__name__)
 
 
-def create_tables(safe=True):
+def init_db(safe=True):
     # Create table for each model if it does not exist.
     db.create_tables([Series, Samples], safe=safe)
 
