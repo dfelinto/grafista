@@ -1,5 +1,5 @@
 import logging
-from flask import jsonify, render_template
+from flask import abort, jsonify, render_template
 from .models import Samples, Series
 from . import app, db
 
@@ -11,30 +11,8 @@ def init_db(safe=True):
     db.create_tables([Series, Samples], safe=safe)
 
 
-@app.route('/series/')
-def index():
-    series = []
-    for s in Series.select():
-        series.append(s.name)
-    return jsonify(series=series)
-
-
-@app.route('/series/<name>')
-def serie_view(name):
-    serie = Series.get(name=name)
-    samples = []
-    for s in Samples.select().where(Samples.serie == serie.id):
-        samples.append((s.timestamp, s.value))
-    return jsonify(samples=samples)
-
-
-@app.route('/')
-def it():
-    return render_template('layout.pug')
-
-
 def insert_sample(serie_name, value):
-    # Check if serie exists
+    # Check if series exists
     if isinstance(value, int):
         value_type = 'int'
     elif isinstance(value, float):
@@ -46,3 +24,42 @@ def insert_sample(serie_name, value):
     sample = Samples(serie=serie.id, value=str(value), value_type=value_type)
     log.debug('Inserting {}'.format(sample))
     sample.save()
+
+
+def get_or_404(item_class, **query):
+    try:
+        item = item_class.get(**query)
+    except item_class.DoesNotExist:
+        return abort(404)
+    return item
+
+
+@app.route('/series/')
+def series_index():
+    series = []
+    for s in Series.select():
+        series.append(s.name)
+    return jsonify(series=series)
+
+
+@app.route('/series/<name>')
+def series_view(name):
+    # Check if series exists
+    serie = get_or_404(Series, name=name)
+    samples_query = Samples.select().where(Samples.serie == serie.id)
+    samples = []
+    for s in samples_query:
+        samples.append((s.timestamp, s.value))
+    return jsonify(samples=samples)
+
+
+@app.route('/stats/<name>')
+def stats_view(name):
+    # Check if series exists
+    serie = get_or_404(Series, name=name)
+    return render_template('stats_view.pug', serie=serie)
+
+
+@app.route('/')
+def dashboard():
+    return render_template('layout.pug')

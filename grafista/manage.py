@@ -13,7 +13,7 @@ def collect():
     from application.main import insert_sample
     ds = current_app.config['DATA_SOURCES']
     print('Collecting data from {}'.format(ds))
-    # Insert sample for the serie
+    # Insert sample for the series
     for source in ds:
         r = requests.get(source)
         response_dict = r.json()

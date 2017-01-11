@@ -28,3 +28,9 @@ def _db_connect():
 def _db_close(exc):
     if not db.is_closed():
         db.close()
+
+
+@app.context_processor
+def inject_series():
+    from application.models import Series
+    return dict(series=Series.select())
