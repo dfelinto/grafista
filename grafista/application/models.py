@@ -13,7 +13,7 @@ class Series(BaseModel):
     or the daily income. A serie is composed of samples, which refer to it.
     """
     name = CharField(unique=True)  # users_total_count
-    description = CharField(null=True)
+    description = CharField(null=True)  # Subscribers
     sample_unit = CharField(null=True)  # People, EUR
 
     def __unicode__(self):
