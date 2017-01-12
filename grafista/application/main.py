@@ -32,11 +32,6 @@ def insert_sample_time(serie_name, value, timestamp=None):
     sample.save()
 
 
-def insert_sample(serie_name, value):
-    timestamp = DateTimeField(default=datetime.datetime.now)
-    insert_sample_time(serie_name, value, timestamp)
-
-
 def get_or_404(item_class, **query):
     try:
         item = item_class.get(**query)
