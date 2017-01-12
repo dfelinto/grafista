@@ -13,7 +13,7 @@ def init_db(safe=True):
     db.create_tables([Series, Samples], safe=safe)
 
 
-def insert_sample_time(serie_name, value, timestamp=None):
+def insert_sample(serie_name, value, timestamp=None):
     # Check if series exists
     if isinstance(value, int):
         value_type = 'int'
