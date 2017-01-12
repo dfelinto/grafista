@@ -26,7 +26,8 @@ database, and useing the following libraries:
 ```
 mkvirtualenv grafista  # Optional, if you use virtualenvwrapper
 pip install -r requirements.txt
-python manage.py init_db  # Initialize database
+cd grafista
+python manage.py db_init  # Initialize database
 python manage.py runserver  # Run Grafista
 ```
 
