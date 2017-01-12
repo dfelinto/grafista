@@ -13,15 +13,15 @@ def collect():
     """Populates the database from the data source
     """
     from application.main import insert_sample
-    ds = current_app.config['DATA_SOURCES']
-    print('Collecting data from {}'.format(ds))
-    # Insert sample for the series
-    for source in ds:
-        r = requests.get(source)
+    for source in current_app.config['DATA_SOURCES']:
+        print('Collecting data from {}'.format(source['url']))
+        # Insert sample for the series
+        r = requests.get(source['url'])
         response_dict = r.json()
         for d, v in response_dict.items():
-            print('Storing {} {}'.format(d, v))
-            insert_sample(d, v)
+            if d in [s['name'] for s in source['series']]:
+                print('Storing {} {}'.format(d, v))
+                insert_sample(d, v)
 
 
 @manager.command
