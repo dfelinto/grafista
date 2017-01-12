@@ -10,7 +10,9 @@ manager = Manager(app)
 
 @manager.command
 def collect():
-    from application.main import insert_sample
+    """Populates the database from the data source
+    """
+    from application.main import insert_sample_time
     ds = current_app.config['DATA_SOURCES']
     print('Collecting data from {}'.format(ds))
     # Insert sample for the series
@@ -19,11 +21,19 @@ def collect():
         response_dict = r.json()
         for d, v in response_dict.items():
             print('Storing {} {}'.format(d, v))
-            insert_sample(d, v)
+            insert_sample_time(d, v)
 
 
 @manager.command
-def insert(csv_file):
+def insert_sample(serie_url, value, timestamp=None):
+    """Manually inserts a sample to the database
+    """
+    from application.main import insert_sample_time
+    insert_sample_time(serie_url, value, timestamp)
+
+
+@manager.command
+def insert_samples(csv_file):
     """Populates the database with a .csv file
     """
     from application.main import insert_sample_time

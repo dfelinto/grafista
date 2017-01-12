@@ -13,7 +13,7 @@ def init_db(safe=True):
     db.create_tables([Series, Samples], safe=safe)
 
 
-def insert_sample_time(serie_name, value, timestamp):
+def insert_sample_time(serie_name, value, timestamp=None):
     # Check if series exists
     if isinstance(value, int):
         value_type = 'int'
@@ -23,7 +23,11 @@ def insert_sample_time(serie_name, value, timestamp):
         value_type = 'str'
 
     serie, created = Series.create_or_get(name=serie_name)
-    sample = Samples(serie=serie.id, value=str(value), value_type=value_type, timestamp=timestamp)
+    sample = Samples(serie=serie.id, value=str(value), value_type=value_type)
+
+    if timestamp:
+        sample.timestamp = timestamp # make sure this is a DateTime object
+
     log.debug('Inserting {}'.format(sample))
     sample.save()
 
