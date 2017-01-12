@@ -1,5 +1,7 @@
 import logging
 from flask import abort, jsonify, render_template
+import datetime
+from peewee import DateTimeField
 from .models import Samples, Series
 from . import app, db
 
@@ -11,7 +13,7 @@ def init_db(safe=True):
     db.create_tables([Series, Samples], safe=safe)
 
 
-def insert_sample(serie_name, value):
+def insert_sample_time(serie_name, value, timestamp):
     # Check if series exists
     if isinstance(value, int):
         value_type = 'int'
@@ -21,9 +23,14 @@ def insert_sample(serie_name, value):
         value_type = 'str'
 
     serie, created = Series.create_or_get(name=serie_name)
-    sample = Samples(serie=serie.id, value=str(value), value_type=value_type)
+    sample = Samples(serie=serie.id, value=str(value), value_type=value_type, timestamp=timestamp)
     log.debug('Inserting {}'.format(sample))
     sample.save()
+
+
+def insert_sample(serie_name, value):
+    timestamp = DateTimeField(default=datetime.datetime.now)
+    insert_sample_time(serie_name, value, timestamp)
 
 
 def get_or_404(item_class, **query):
