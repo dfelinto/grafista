@@ -48,10 +48,21 @@ def insert_samples(csv_file):
 
 
 @manager.command
-def db_init():
+def init_db():
     from application.main import init_db
     # TODO: Expose safety option
     init_db()
+
+
+@manager.command
+def init_series():
+    """Create series from DATA_SOURCES"""
+    from application.models import Series
+    for data_source in current_app.config['DATA_SOURCES']:
+        for serie in data_source['series']:
+            s, created = Series.get_or_create(name=serie['name'])
+            if created:
+                print('Created {}'.format(s))
 
 if __name__ == "__main__":
     manager.run()
