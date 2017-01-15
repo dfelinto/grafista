@@ -21,7 +21,7 @@ def insert_sample(serie_name, value, timestamp=None):
     else:
         value_type = 'str'
 
-    serie, created = Series.create_or_get(name=serie_name)
+    serie, created = Series.get_or_create(serie_name)
     sample = Samples(serie=serie.id, value=str(value), value_type=value_type)
 
     if timestamp and isinstance(timestamp, datetime.datetime):

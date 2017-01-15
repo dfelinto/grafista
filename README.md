@@ -38,3 +38,11 @@ functionality to Grafista.
 * import data (for example using CSV files)
 * define and implement *dashboards* and *queries*
 * support multiple data collection systems (url query, but also functions)
+
+
+## Known issues
+Because the `name` attribute of a Series record has to be unique, we have to be
+sure that even in different data sources, records don't have conflicting names.
+
+This could be solved by introducing a `source` attribute in the Series model,
+and then enforcing name uniqueness for records featuring the same `source`.
