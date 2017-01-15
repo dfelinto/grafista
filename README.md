@@ -31,6 +31,23 @@ python manage.py db_init  # Initialize database
 python manage.py runserver  # Run Grafista
 ```
 
+## Configuration
+In order to get Grafista up and running, create a file called `config_local.py`
+and override the desired config values available in `config.py`. In particular,
+add some `DATA_SOURCES`.
+
+```
+DATA_SOURCES = [
+    {'url': 'https://www.example.com/stats.json',
+     'series': [
+         {'name': 'total_sold',
+          'description': 'Subscriptions',
+          'sample_unit': 'People'}
+     ]},
+]
+
+```
+
 ## Roadmap
 In order to further explore the scope of the application, we want to add a some
 functionality to Grafista.
