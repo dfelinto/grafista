@@ -49,7 +49,7 @@ html
         | {% for serie in serie_row %}
         .col-6
           p
-            svg(id="{{serie.name}}", class="sparline")
+            svg(id="{{serie.name}}", class="sparkline")
         | {% endfor %}
       | {% endfor %}
 
@@ -60,6 +60,7 @@ html
       function chartCall(serie_name) {
         d3.json('/series/' + serie_name, function(data) {
           nv.addGraph(function () {
+            data = parseSamples(data);
 
             var chart = nv.models.sparklinePlus();
             chart.margin({left: 70})
@@ -71,8 +72,8 @@ html
                   return d3.time.format('%x')(new Date(data[d].x))
               });
 
-            d3.select('#' + serie_name)
-              .datum(parseSamples(data))
+              d3.select('#' + serie_name)
+              .datum(data)
               .call(chart);
 
             return chart;
