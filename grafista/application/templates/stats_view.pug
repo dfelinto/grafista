@@ -30,7 +30,7 @@ script.
 
 
       chart.yAxis
-        .axisLabel("Subscribers")
+        .axisLabel("{{ serie.description }}")
         .tickFormat(function (d) {
           if (d == null) {
               return 'N/A';
@@ -44,7 +44,7 @@ script.
         {
           area: true,
           values: parseSamples(data),
-          key: "Active Subscribers",
+          key: "{{ serie.description }}",
           color: "#7dc2fb",
           fillOpacity: .1
         }
