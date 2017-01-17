@@ -51,6 +51,8 @@ html
       .row
         | {% for serie in serie_row %}
         .col-6
+          h4
+           a(href="{{ url_for('stats_view', name=serie.name) }}") {{ serie.description }}
           p
             svg(id="{{serie.name}}", class="sparkline")
         | {% endfor %}
