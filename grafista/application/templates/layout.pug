@@ -2,55 +2,38 @@ doctype html
 html
   head
     meta(charset="utf-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no")
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    title Grafista
+    link(href="{{ url_for('static', filename='assets/css/bootstrap.min.css') }}", rel="stylesheet", type="text/css")
+    link(href="{{ url_for('static', filename='assets/css/main.css') }}", rel="stylesheet", type="text/css")
     link(href="{{ url_for('static', filename='assets/css/nv.d3.min.css') }}", rel="stylesheet", type="text/css")
-    link(href="{{ url_for('static', filename='assets/css/simple-grid.min.css') }}", rel="stylesheet", type="text/css")
-    //link(href="{{ url_for('static', filename='assets/css/main.css') }}", rel="stylesheet", type="text/css")
-    script(src="{{ url_for('static', filename='assets/js/d3.min.js') }}")
-    script(src="{{ url_for('static', filename='assets/js/nv.d3.min.js') }}")
-    script(src="{{ url_for('static', filename='assets/js/utils.js') }}")
 
-    style.
-      text {
-        font: 12px sans-serif;
-      }
-
-      svg {
-        display: block;
-      }
-
-      html, body, svg {
-        margin: 0px;
-        padding: 0px;
-        height: 100%;
-        width: 100%;
-      }
-
-      svg.sparkline {
-        width: 500px;
-        height: 70px;
-        font-size: 14px;
-        margin-top: -6px;
-      }
   body
-    .container
-      .row
-        .col-12
-          section#Prospero.section.section--menu
-            nav.menu.menu--prospero
-              ul.menu__list
-                li.menu__item.menu__item--current
-                  a.menu__link(href="{{ url_for('dashboard') }}") Home
-                | {% for serie in series %}
-                li.menu__item
-                  a.menu__link(href="{{ url_for('stats_view', name=serie.name) }}") {{ serie.description }}
-                | {% endfor %}
+
+    nav.navbar.navbar-toggleable-md.navbar-inverse.bg-inverse
+      button.navbar-toggler.navbar-toggler-right(type='button', data-toggle='collapse', data-target='#navbarsExampleDefault', aria-controls='navbarsExampleDefault', aria-expanded='false', aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      |
+      a.navbar-brand(href="{{ url_for('dashboard') }}") {{ config['TITLE'] }}
+      #navbarsExampleDefault.collapse.navbar-collapse
+        ul.navbar-nav.mr-auto
+          li.nav-item.active
+            a.nav-link(href="{{ url_for('dashboard') }}")
+              | Home
+              span.sr-only (current)
+          li.nav-item.dropdown
+            a#dropdown01.nav-link.dropdown-toggle(href='http://example.com', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') Series
+            .dropdown-menu(aria-labelledby='dropdown01')
+              | {% for serie in series %}
+              a.dropdown-item(href="{{ url_for('stats_view', name=serie.name) }}") {{ serie.description }}
+              | {% endfor %}
+
     | {% block body %}
     .container
       | {% for serie_row in series | batch(2, '&nbsp;') %}
       .row
         | {% for serie in serie_row %}
-        .col-6
+        .col-md-6
           h4
            a(href="{{ url_for('stats_view', name=serie.name) }}") {{ serie.description }}
           p
@@ -59,8 +42,17 @@ html
       | {% endfor %}
 
     | {% endblock %}
-    | {% block footer_scripts %} {% endblock %}
 
+
+    script(src="{{ url_for('static', filename='assets/js/d3.min.js') }}")
+    script(src="{{ url_for('static', filename='assets/js/nv.d3.min.js') }}")
+
+    script(src='//code.jquery.com/jquery-3.1.1.slim.min.js', integrity='sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n', crossorigin='anonymous')
+    //script.
+        window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\\/script>')
+    //script(src='//cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js', integrity='sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb', crossorigin='anonymous')
+    script(src="{{ url_for('static', filename='assets/js/bootstrap.min.js') }}")
+    script(src="{{ url_for('static', filename='assets/js/utils.js') }}")
     script.
       function chartCall(serie_name) {
         d3.json('/series/' + serie_name, function(data) {
@@ -89,4 +81,6 @@ html
       {% for serie in series %}
       chartCall("{{ serie.name }}");
       {% endfor %}
+
+    | {% block footer_scripts %} {% endblock %}
 

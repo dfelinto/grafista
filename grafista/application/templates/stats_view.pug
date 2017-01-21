@@ -2,8 +2,11 @@
 | {% block body %}
 .container
   .row
-    p(style="height:500px")
-      svg#chart1
+    .col-md-12
+      p(style="height:600px")
+        svg#chart1
+| {% endblock %}
+| {% block footer_scripts%}
 script.
 
   // Wrapping in nv.addGraph allows for '0 timeout render', stores rendered charts in nv.graphs, and may do more in the future... it's NOT required

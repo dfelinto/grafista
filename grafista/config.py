@@ -1,6 +1,7 @@
 import os.path
 
 DEBUG = True
+TITLE = 'Grafista'
 APP_DIR = os.path.dirname(os.path.realpath(__file__))
 DATABASE = 'grafista.sqlite'
 DATA_SOURCES = []
