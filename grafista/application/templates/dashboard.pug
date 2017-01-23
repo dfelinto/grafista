@@ -1,0 +1,33 @@
+| {% extends 'layout.pug' %}
+
+| {% block footer_scripts %}
+script.
+    function chartCall(serie_name) {
+        d3.json('/series/' + serie_name, function (data) {
+            nv.addGraph(function () {
+                data = parseSamples(data);
+
+                var chart = nv.models.sparklinePlus();
+                chart.margin({left: 70})
+                    .x(function (d, i) {
+                        return i
+                    })
+                    .showLastValue(true)
+                    .yTickFormat(d3.format('d'))
+                    .xTickFormat(function (d) {
+                        return d3.time.format('%x')(new Date(data[d].x))
+                    });
+
+                d3.select('#' + serie_name)
+                    .datum(data)
+                    .call(chart);
+
+                return chart;
+            });
+        });
+    }
+    {% for serie in series %}
+    chartCall("{{ serie.name }}");
+    {% endfor %}
+
+| {% endblock %}

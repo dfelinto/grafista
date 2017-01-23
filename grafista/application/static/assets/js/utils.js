@@ -10,3 +10,19 @@ function parseSamples(data) {
     // console.log(processedArray);
     return processedArray;
 }
+
+function prepData(rawData) {
+var x = [];
+var y = [];
+
+rawData['samples'].forEach(function (datum, i) {
+  x.push(new Date(datum[0]));
+  y.push(datum[1]);
+});
+
+return [{
+  mode: 'lines',
+  x: x,
+  y: y
+}];
+}

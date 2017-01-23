@@ -30,6 +30,9 @@ html
 
     | {% block body %}
     .container
+      .row
+        .col-md-12
+          div#graph
       | {% for serie_row in series | batch(2, '&nbsp;') %}
       .row
         | {% for serie in serie_row %}
@@ -43,6 +46,7 @@ html
 
     | {% endblock %}
 
+    script(src="https://cdn.plot.ly/plotly-latest.min.js")
 
     script(src="{{ url_for('static', filename='assets/js/d3.min.js') }}")
     script(src="{{ url_for('static', filename='assets/js/nv.d3.min.js') }}")
@@ -50,37 +54,9 @@ html
     script(src='//code.jquery.com/jquery-3.1.1.slim.min.js', integrity='sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n', crossorigin='anonymous')
     //script.
         window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\\/script>')
-    //script(src='//cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js', integrity='sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb', crossorigin='anonymous')
+    script(src='//cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js', integrity='sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb', crossorigin='anonymous')
     script(src="{{ url_for('static', filename='assets/js/bootstrap.min.js') }}")
     script(src="{{ url_for('static', filename='assets/js/utils.js') }}")
-    script.
-      function chartCall(serie_name) {
-        d3.json('/series/' + serie_name, function(data) {
-          nv.addGraph(function () {
-            data = parseSamples(data);
-
-            var chart = nv.models.sparklinePlus();
-            chart.margin({left: 70})
-              .x(function (d, i) {
-                  return i
-              })
-              .showLastValue(true)
-              .yTickFormat(d3.format('d'))
-              .xTickFormat(function (d) {
-                  return d3.time.format('%x')(new Date(data[d].x))
-              });
-
-              d3.select('#' + serie_name)
-              .datum(data)
-              .call(chart);
-
-            return chart;
-          });
-        });
-      }
-      {% for serie in series %}
-      chartCall("{{ serie.name }}");
-      {% endfor %}
 
     | {% block footer_scripts %} {% endblock %}
 

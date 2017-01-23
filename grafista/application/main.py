@@ -67,4 +67,4 @@ def stats_view(name):
 
 @app.route('/')
 def dashboard():
-    return render_template('layout.pug')
+    return render_template('dashboard.pug')
