@@ -3,7 +3,8 @@
 | {% block footer_scripts %}
 script.
     function chartCall(serie_name) {
-        d3.json('/series/' + serie_name, function (data) {
+      var dataSource= "{{ config['APPLICATION_ROOT']}}/series/" + serie_name + "?format=json";
+        d3.json(dataSource, function (data) {
             nv.addGraph(function () {
                 data = parseSamples(data);
 

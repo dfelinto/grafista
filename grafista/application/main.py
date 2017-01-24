@@ -1,5 +1,5 @@
 import logging
-from flask import abort, jsonify, render_template
+from flask import abort, jsonify, render_template, request
 import datetime
 from .models import Samples, Series
 from . import app, db
@@ -51,18 +51,15 @@ def series_index():
 def series_view(name):
     # Check if series exists
     serie = get_or_404(Series, name=name)
-    samples_query = Samples.select().where(Samples.serie == serie.id)
-    samples = []
-    for s in samples_query:
-        samples.append((s.timestamp, s.value))
-    return jsonify(samples=samples)
-
-
-@app.route('/stats/<name>')
-def stats_view(name):
-    # Check if series exists
-    serie = get_or_404(Series, name=name)
-    return render_template('stats_view.pug', serie=serie)
+    request_format = request.args.get('format')
+    if request_format and request_format == 'json':
+        samples_query = Samples.select().where(Samples.serie == serie.id)
+        samples = []
+        for s in samples_query:
+            samples.append((s.timestamp, s.value))
+        return jsonify(samples=samples)
+    else:
+        return render_template('series_view.pug', serie=serie)
 
 
 @app.route('/')

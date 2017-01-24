@@ -7,7 +7,7 @@
 | {% endblock %}
 | {% block footer_scripts%}
 script.
-  var rawDataURLJSON = "/series/{{ serie.name }}";
+  var rawDataURLJSON = "{{ config['APPLICATION_ROOT'] }}/series/{{ serie.name }}" + "?format=json";
 
   var xField = 'Date';
   var yField = 'Mean_TemperatureC';
