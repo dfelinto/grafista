@@ -1,0 +1,22 @@
+FROM grafista_base
+MAINTAINER Francesco Siddi <francesco@blender.org>
+
+RUN apt-get update && apt-get install -qy \
+git \
+gcc \
+libffi-dev \
+libssl-dev \
+pypy-dev \
+python3-dev \
+python3-crypto \
+python3-openssl
+
+ENV WHEELHOUSE=/data/wheelhouse
+ENV PIP_WHEEL_DIR=/data/wheelhouse
+ENV PIP_FIND_LINKS=/data/wheelhouse
+
+VOLUME /data/wheelhouse
+
+ADD requirements.txt /requirements.txt
+ADD build-wheels.sh /build-wheels.sh
+ENTRYPOINT ["bash", "build-wheels.sh"]
