@@ -46,6 +46,12 @@ class Series(BaseModel):
             inst.save()
         return inst, created
 
+    @property
+    def latest_sample(self):
+        """The latest sample for a serie, used to show values in the interface"""
+        sample = Samples.select().order_by(Samples.timestamp.desc()).get()
+        return sample
+
     def __unicode__(self):
         return self.name
 
