@@ -43,7 +43,7 @@ script.
 
     var data = prepData(rawData);
     var layout = {
-      title: "{{ serie.description }}",
+      title: "{{ serie.description }}{% if serie.latest_sample %} ({{ serie.latest_sample.value }}){% endif %}",
       xaxis: {
         rangeselector: selectorOptions,
         rangeslider: {}

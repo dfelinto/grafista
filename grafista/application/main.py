@@ -54,9 +54,7 @@ def series_view(name):
     request_format = request.args.get('format')
     if request_format and request_format == 'json':
         samples_query = Samples.select().where(Samples.serie == serie.id)
-        samples = []
-        for s in samples_query:
-            samples.append((s.timestamp, s.value))
+        samples = [(s.timestamp, int(s.value)) for s in samples_query]
         return jsonify(samples=samples)
     else:
         return render_template('series_view.pug', serie=serie)
