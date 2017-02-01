@@ -49,7 +49,7 @@ class Series(BaseModel):
     @property
     def latest_sample(self):
         """The latest sample for a serie, used to show values in the interface"""
-        sample = Samples.select().order_by(Samples.timestamp.desc()).get()
+        sample = Samples.select().where(Samples.serie_id == self.id).order_by(Samples.timestamp.desc()).get()
         return sample
 
     def __unicode__(self):
