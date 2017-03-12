@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -qyy \
     python3-pip openssl rsyslog logrotate
 
 RUN mkdir -p /data/git/grafista \
-&& mkdir -p /data/storage \
+&& mkdir -p /data/storage/grafista \
 && mkdir -p /data/venv \
 && mkdir -p /data/wheelhouse
 

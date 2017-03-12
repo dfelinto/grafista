@@ -1,4 +1,6 @@
-#!/usr/bin/env bash -e
+#!/usr/bin/env bash
+
+set -e
 
 . /data/venv/bin/activate
 cd /data/git/grafista/grafista
