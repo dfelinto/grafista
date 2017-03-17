@@ -25,7 +25,7 @@ RUN . /data/venv/bin/activate \
 && rm /requirements.txt
 
 VOLUME /data/git/grafista
-VOLUME /data/storage
+VOLUME /data/storage/grafista
 
 EXPOSE 80
 EXPOSE 5000
@@ -34,5 +34,7 @@ ADD apache2.conf /etc/apache2/apache2.conf
 ADD 000-default.conf /etc/apache2/sites-available/000-default.conf
 ADD docker-entrypoint.sh /docker-entrypoint.sh
 ADD manage.sh /manage.sh
+
+RUN a2enmod rewrite
 
 ENTRYPOINT ["bash", "/docker-entrypoint.sh"]
