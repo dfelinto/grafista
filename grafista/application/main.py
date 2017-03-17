@@ -14,18 +14,21 @@ def init_db(safe=True):
 
 def insert_sample(serie_name, value, timestamp=None):
     # Check if series exists
-    if isinstance(value, int):
-        value_type = 'int'
-    elif isinstance(value, float):
-        value_type = 'float'
-    else:
+    if isinstance(value, float):
         value_type = 'str'
+    else:
+        value_type = 'int'
 
     serie, created = Series.get_or_create(serie_name)
     sample = Samples(serie=serie.id, value=str(value), value_type=value_type)
 
-    if timestamp and isinstance(timestamp, datetime.datetime):
-        sample.timestamp = timestamp
+    if timestamp:
+        try:
+            sample.timestamp = datetime.datetime.strptime(timestamp, '%Y-%m-%d')
+        except ValueError:
+            log.debug('Invalid timestamp format {}, should be {}').format(
+                timestamp, '%Y-%m-%d'
+            )
 
     log.debug('Inserting {}'.format(sample))
     sample.save()
